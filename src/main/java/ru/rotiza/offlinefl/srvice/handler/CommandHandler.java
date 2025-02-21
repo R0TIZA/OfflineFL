@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.rotiza.offlinefl.srvice.factory.KeyboardFactory;
 import ru.rotiza.offlinefl.telegram.Bot;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static ru.rotiza.offlinefl.srvice.data.Command.*;
@@ -23,12 +24,6 @@ public class CommandHandler {
             /help, /h - комманды, благодаря котором можно вывести эту подсказку снова.\n
             /echo [Ваш текст] - бот напишет в ответ все что вы введете после этой команды.\n
             /feedback - получить ссылки на соц. сети для обратной связи.\n
-            """;
-
-    final String FEEDBACK_TEXT = """
-            Ссылки для обратной связи:
-            VK - https://vk.com/r0tiza
-            TG - https://t.me/R0TIZA
             """;
 
     final KeyboardFactory keyboardFactory;
@@ -50,9 +45,14 @@ public class CommandHandler {
             case START:
                 return start(chatId, INFO_TEXT);
             case ECHO:
+                if (args.length == 1 && args[0].equals("")) return simpleAnswer(chatId, "И в ответ тишина.");
                 return simpleAnswer(chatId, String.join(" ", args));
             case FEEDBACK:
-                return simpleAnswer(chatId, FEEDBACK_TEXT);
+                return simpleAnswer(chatId, """
+                                                    Ссылки для обратной связи:
+                                                    VK - https://vk.com/r0tiza
+                                                    TG - https://t.me/R0TIZA
+                                                    """);
             default:
                 return simpleAnswer(chatId, "У этого бота пока нет такой команды.");
         }
