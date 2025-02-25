@@ -1,37 +1,37 @@
 package ru.rotiza.offlinefl.srvice.manager;
 
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.MaybeInaccessibleMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.rotiza.offlinefl.srvice.factory.AnswerMethodFactory;
+import ru.rotiza.offlinefl.srvice.factory.KeyboardFactory;
 
 @Component
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class SimpleMessageManager {
 
-    public BotApiMethod<?> sendMessage(String chatId, String text) {
-        return SendMessage.builder()
-                .chatId(chatId)
-                .text(text)
-                .build();
+    final AnswerMethodFactory answerMethodFactory;
+    final KeyboardFactory keyboardFactory;
+
+    @Autowired
+    public SimpleMessageManager(AnswerMethodFactory answerMethodFactory, KeyboardFactory keyboardFactory) {
+        this.answerMethodFactory = answerMethodFactory;
+        this.keyboardFactory = keyboardFactory;
     }
 
-    public BotApiMethod<?> sendMessage(long chatId, String text) {
-        return SendMessage.builder()
-                .chatId(chatId)
-                .text(text)
-                .build();
+    public BotApiMethod<?> sendMessage(Long chatId, String text) {
+        return answerMethodFactory.getSendMessage(chatId, text,null);
     }
 
     public BotApiMethod<?> answerCallbackQuery(CallbackQuery callbackQuery, String text) {
-        return EditMessageText.builder()
-                .chatId(callbackQuery.getMessage().getChatId())
-                .messageId(((Message)callbackQuery.getMessage()).getMessageId())
-                .text(text)
-                .build();
+        return answerMethodFactory.getEditMessageText(callbackQuery.getMessage().getChatId(),
+                ((Message)callbackQuery.getMessage()).getMessageId(),
+                text,
+                null);
     }
 
 }

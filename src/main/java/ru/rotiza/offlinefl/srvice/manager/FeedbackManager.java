@@ -1,44 +1,41 @@
 package ru.rotiza.offlinefl.srvice.manager;
 
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import ru.rotiza.offlinefl.srvice.factory.AnswerMethodFactory;
+import ru.rotiza.offlinefl.srvice.factory.KeyboardFactory;
+
+import static ru.rotiza.offlinefl.srvice.data.Texts.*;
 
 @Component
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class FeedbackManager {
 
-    private final String FEEDBACK_TEXT = """
-                                        Ссылки для обратной связи:
-                                        VK - https://vk.com/r0tiza
-                                        TG - https://t.me/R0TIZA
-                                        """;
+    final AnswerMethodFactory answerMethodFactory;
+    final KeyboardFactory keyboardFactory;
 
-    public BotApiMethod<?> sendFeedbackText(String chatId){
-        return SendMessage.builder()
-                .chatId(chatId)
-                .text(FEEDBACK_TEXT)
-                .disableWebPagePreview(true)
-                .build();
+    @Autowired
+    public FeedbackManager(AnswerMethodFactory answerMethodFactory, KeyboardFactory keyboardFactory) {
+        this.answerMethodFactory = answerMethodFactory;
+        this.keyboardFactory = keyboardFactory;
     }
 
-    public BotApiMethod<?> sendFeedbackText(long chatId){
-        return SendMessage.builder()
-                .chatId(chatId)
-                .text(FEEDBACK_TEXT)
-                .disableWebPagePreview(true)
-                .build();
+    public BotApiMethod<?> sendFeedbackText(Long chatId){
+        return answerMethodFactory.getSendMessage(chatId, FEEDBACK_TEXT, null);
     }
 
     public BotApiMethod<?> answerCallbackQuery(CallbackQuery callbackQuery) {
-        return EditMessageText.builder()
-                .chatId(callbackQuery.getMessage().getChatId())
-                .messageId(((Message)callbackQuery.getMessage()).getMessageId())
-                .text(FEEDBACK_TEXT)
-                .disableWebPagePreview(true)
-                .build();
+        return answerMethodFactory.getEditMessageText(
+                callbackQuery.getMessage().getChatId(),
+                ((Message)callbackQuery.getMessage()).getMessageId(),
+                FEEDBACK_TEXT,
+                null
+        );
     }
 
 }

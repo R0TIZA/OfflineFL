@@ -1,44 +1,50 @@
 package ru.rotiza.offlinefl.srvice.manager;
 
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import ru.rotiza.offlinefl.srvice.factory.AnswerMethodFactory;
+import ru.rotiza.offlinefl.srvice.factory.KeyboardFactory;
 
 @Component
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class EchoManager {
 
-    public BotApiMethod<?> echo(String chatId, String[] args) {
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.disableWebPagePreview();
-        if (args.length == 0) message.setText("А в ответ тишина");
-        else message.setText(String.join(" ", args));
+    final AnswerMethodFactory answerMethodFactory;
+    final KeyboardFactory keyboardFactory;
 
-        return message;
+    @Autowired
+    public EchoManager(AnswerMethodFactory answerMethodFactory, KeyboardFactory keyboardFactory) {
+        this.answerMethodFactory = answerMethodFactory;
+        this.keyboardFactory = keyboardFactory;
     }
 
-    public BotApiMethod<?> echo(long chatId, String[] args) {
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.disableWebPagePreview();
-        if (args.length == 0) message.setText("А в ответ тишина");
-        else message.setText(String.join(" ", args));
-
-        return message;
+    public BotApiMethod<?> echo(Long chatId, String[] args) {
+        if (args.length == 0)
+            return answerMethodFactory.getSendMessage(chatId, "А в ответ тишина.", null);
+        else
+            return answerMethodFactory.getSendMessage(chatId, String.join(" ", args), null);
     }
 
     public BotApiMethod<?> answerCallbackQuery(CallbackQuery callbackQuery, String[] args) {
-        EditMessageText message = new EditMessageText();
-        message.setChatId(callbackQuery.getMessage().getChatId());
-        message.setMessageId(((Message)callbackQuery.getMessage()).getMessageId());
-        message.disableWebPagePreview();
-        if (args.length == 0) message.setText("А в ответ тишина");
-        else message.setText(String.join(" ", args));
-
-        return message;
+        if (args.length == 0)
+            return answerMethodFactory.getEditMessageText(
+                    callbackQuery.getMessage().getChatId(),
+                    ((Message)callbackQuery.getMessage()).getMessageId(),
+                    "А в ответ тишина.",
+                    null
+            );
+        else
+            return answerMethodFactory.getEditMessageText(
+                    callbackQuery.getMessage().getChatId(),
+                    ((Message)callbackQuery.getMessage()).getMessageId(),
+                    String.join(" ", args),
+                    null
+        );
     }
 
 }

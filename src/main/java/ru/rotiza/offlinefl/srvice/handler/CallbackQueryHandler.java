@@ -5,23 +5,14 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.MaybeInaccessibleMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
-import ru.rotiza.offlinefl.srvice.factory.KeyboardFactory;
-import ru.rotiza.offlinefl.srvice.manager.EchoManager;
-import ru.rotiza.offlinefl.srvice.manager.FeedbackManager;
-import ru.rotiza.offlinefl.srvice.manager.InfoManager;
-import ru.rotiza.offlinefl.srvice.manager.SimpleMessageManager;
+import ru.rotiza.offlinefl.srvice.manager.*;
 import ru.rotiza.offlinefl.telegram.Bot;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static ru.rotiza.offlinefl.srvice.data.Commands.*;
+import static ru.rotiza.offlinefl.srvice.data.Texts.*;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -53,7 +44,7 @@ public class CallbackQueryHandler {
             case ECHO:
                 return echoManager.answerCallbackQuery(callbackQuery, callbackArgs);
             default:
-                return simpleMessageManager.answerCallbackQuery(callbackQuery, "Дурень, кнопку сделал, а поведение не задал. Иди доделывай!");
+                return simpleMessageManager.answerCallbackQuery(callbackQuery, NO_CALLBACK_QUERY_TEXT);
         }
     }
 }
