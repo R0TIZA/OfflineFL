@@ -15,4 +15,5 @@ public class Texts {
             """;
     public static final String NO_COMMAND_TEXT = "У этого бота пока нет такой команды.";
     public static final String NO_CALLBACK_QUERY_TEXT = "Дурень, кнопку сделал, а поведение не задал. Иди доделывай!";
+    public static final String EMPTY_ECHO_ARGS_TEXT = "А в ответ тишина.";
 }

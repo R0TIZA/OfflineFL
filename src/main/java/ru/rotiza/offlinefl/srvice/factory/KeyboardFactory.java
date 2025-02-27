@@ -1,7 +1,6 @@
 package ru.rotiza.offlinefl.srvice.factory;
 
 import jakarta.validation.constraints.NotNull;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -11,8 +10,18 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 public class KeyboardFactory {
+
+    private static KeyboardFactory keyboardFactoryInstance;
+
+    private KeyboardFactory() {
+    }
+
+    public static KeyboardFactory getInstance() {
+        if(keyboardFactoryInstance==null)
+            return new KeyboardFactory();
+        else return keyboardFactoryInstance;
+    }
 
     public InlineKeyboardMarkup getInlineKeyboard(
             @NotNull List<String> text,

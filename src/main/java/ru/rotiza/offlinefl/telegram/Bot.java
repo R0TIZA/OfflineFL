@@ -27,16 +27,7 @@ public class Bot extends TelegramWebhookBot {
         this.telegramProperties = telegramProperties;
         this.dispatcher = dispatcher;
 
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url("https://api.telegram.org/bot"+telegramProperties.getToken()+"/setWebhook?url="+telegramProperties.getPath())
-                .build();
-        try(Response response = client.newCall(request).execute()){
-            System.out.println(response.isSuccessful());
-        }
-        catch (IOException e){
-            e.fillInStackTrace();
-        }
+        setWebhookUrl();
     }
 
     @Override
@@ -52,5 +43,18 @@ public class Bot extends TelegramWebhookBot {
     @Override
     public String getBotUsername() {
         return telegramProperties.getName();
+    }
+
+    private void setWebhookUrl() {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("https://api.telegram.org/bot"+telegramProperties.getToken()+"/setWebhook?url="+telegramProperties.getPath())
+                .build();
+        try(Response response = client.newCall(request).execute()){
+            System.out.println(response.isSuccessful());
+        }
+        catch (IOException e){
+            e.fillInStackTrace();
+        }
     }
 }

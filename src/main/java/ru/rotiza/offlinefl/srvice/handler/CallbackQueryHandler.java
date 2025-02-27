@@ -6,13 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import ru.rotiza.offlinefl.srvice.manager.*;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import ru.rotiza.offlinefl.srvice.manager.echo.EchoManager;
+import ru.rotiza.offlinefl.srvice.manager.feedback.FeedbackManager;
+import ru.rotiza.offlinefl.srvice.manager.info.InfoManager;
+import ru.rotiza.offlinefl.srvice.manager.unknown_command.UnknownCommandManager;
 import ru.rotiza.offlinefl.telegram.Bot;
 
 import java.util.Arrays;
 
 import static ru.rotiza.offlinefl.srvice.data.Commands.*;
-import static ru.rotiza.offlinefl.srvice.data.Texts.*;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -21,30 +24,29 @@ public class CallbackQueryHandler {
     final InfoManager infoManager;
     final EchoManager echoManager;
     final FeedbackManager feedbackManager;
-    final SimpleMessageManager simpleMessageManager;
+    final UnknownCommandManager unknownCommandManager;
 
     @Autowired
-    public CallbackQueryHandler(InfoManager infoManager, EchoManager echoManager, FeedbackManager feedbackManager, SimpleMessageManager simpleMessageManager) {
+    public CallbackQueryHandler(InfoManager infoManager, EchoManager echoManager, FeedbackManager feedbackManager, UnknownCommandManager unknownCommandManager) {
         this.infoManager = infoManager;
         this.echoManager = echoManager;
         this.feedbackManager = feedbackManager;
-        this.simpleMessageManager = simpleMessageManager;
+        this.unknownCommandManager = unknownCommandManager;
     }
 
     public BotApiMethod<?> answer(CallbackQuery callbackQuery, Bot bot) {
-
         String callbackCommand = callbackQuery.getData().split(" ")[0];
-        String[] callbackArgs = Arrays.stream(callbackQuery.getData().split(" ")).skip(1).toArray(String[]::new);
 
         switch (callbackCommand){
             case INFO:
-                return infoManager.answerCallbackQuery(callbackQuery);
+                return infoManager.answerCallbackQuery(callbackQuery, bot);
             case FEEDBACK:
-                return feedbackManager.answerCallbackQuery(callbackQuery);
+                return feedbackManager.answerCallbackQuery(callbackQuery, bot);
             case ECHO:
-                return echoManager.answerCallbackQuery(callbackQuery, callbackArgs);
+                System.out.println("echo");
+                return echoManager.answerCallbackQuery(callbackQuery, bot);
             default:
-                return simpleMessageManager.answerCallbackQuery(callbackQuery, NO_CALLBACK_QUERY_TEXT);
+                return unknownCommandManager.answerCallbackQuery(callbackQuery, bot);
         }
     }
 }
