@@ -10,6 +10,8 @@ import ru.rotiza.offlinefl.srvice.manager.echo.EchoManager;
 import ru.rotiza.offlinefl.srvice.manager.feedback.FeedbackManager;
 import ru.rotiza.offlinefl.srvice.manager.info.InfoManager;
 import ru.rotiza.offlinefl.srvice.manager.start.StartManager;
+import ru.rotiza.offlinefl.srvice.manager.task.TaskManager;
+import ru.rotiza.offlinefl.srvice.manager.timetable.TimetableManager;
 import ru.rotiza.offlinefl.srvice.manager.unknown_command.UnknownCommandManager;
 import ru.rotiza.offlinefl.telegram.Bot;
 
@@ -24,14 +26,24 @@ public class CommandHandler {
     final EchoManager echoManager;
     final FeedbackManager feedbackManager;
     final UnknownCommandManager unknownCommandManager;
+    final TimetableManager timetableManager;
+    final TaskManager taskManager;
 
     @Autowired
-    public CommandHandler(InfoManager infoManager, EchoManager echoManager, FeedbackManager feedbackManager, UnknownCommandManager unknownCommandManager, StartManager startManager) {
+    public CommandHandler(InfoManager infoManager,
+                          EchoManager echoManager,
+                          FeedbackManager feedbackManager,
+                          UnknownCommandManager unknownCommandManager,
+                          StartManager startManager,
+                          TimetableManager timetableManager,
+                          TaskManager taskManager) {
         this.infoManager = infoManager;
         this.echoManager = echoManager;
         this.feedbackManager = feedbackManager;
         this.unknownCommandManager = unknownCommandManager;
         this.startManager = startManager;
+        this.timetableManager = timetableManager;
+        this.taskManager = taskManager;
     }
 
     public BotApiMethod<?> answer(Message message, Bot bot) {
@@ -48,6 +60,10 @@ public class CommandHandler {
                 return echoManager.answerCommand(message, bot);
             case FEEDBACK:
                 return feedbackManager.answerCommand(message, bot);
+            case TIMETABLE:
+                return timetableManager.answerCommand(message, bot);
+            case TASK:
+                return taskManager.answerCommand(message, bot);
             default:
                 return unknownCommandManager.answerCommand(message, bot);
         }

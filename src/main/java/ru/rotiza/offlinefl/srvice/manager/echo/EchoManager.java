@@ -27,12 +27,19 @@ public class EchoManager extends AbstractManager {
     @Override
     public BotApiMethod<?> answerCommand(Message message, Bot bot) {
         String[] args = Arrays.stream(message.getText().split(" ")).skip(1).toArray(String[]::new);
-        Long chatId = message.getChatId();
 
         if (args.length == 0)
-            return answerMethodFactory.getSendMessage(chatId, EMPTY_ECHO_ARGS_TEXT, null);
+            return answerMethodFactory.getSendMessage(
+                    message,
+                    EMPTY_ECHO_ARGS_TEXT,
+                    null
+            );
         else
-            return answerMethodFactory.getSendMessage(chatId, String.join(" ", args), null);
+            return answerMethodFactory.getSendMessage(
+                    message,
+                    String.join(" ", args),
+                    null
+            );
     }
 
     @Override
@@ -42,14 +49,19 @@ public class EchoManager extends AbstractManager {
 
     @Override
     public BotApiMethod<?> answerCallbackQuery(CallbackQuery callbackQuery, Bot bot) {
-        Message message = (Message)callbackQuery.getMessage();
-        Long chatId = message.getChatId();
-        Integer messageId = message.getMessageId();
         String[] args = Arrays.stream(callbackQuery.getData().split(" ")).skip(1).toArray(String[]::new);
 
         if (args.length == 0)
-            return answerMethodFactory.getEditMessageText(chatId, messageId, EMPTY_ECHO_ARGS_TEXT, null);
+            return answerMethodFactory.getEditMessageText(
+                    callbackQuery,
+                    EMPTY_ECHO_ARGS_TEXT,
+                    null
+            );
         else
-            return answerMethodFactory.getEditMessageText(chatId, messageId, String.join(" ", args), null);
+            return answerMethodFactory.getEditMessageText(
+                    callbackQuery,
+                    String.join(" ", args),
+                    null
+            );
     }
 }

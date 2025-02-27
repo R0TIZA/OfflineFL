@@ -21,8 +21,11 @@ public class UnknownCommandManager extends AbstractManager {
 
     @Override
     public BotApiMethod<?> answerCommand(Message message, Bot bot) {
-        Long chatId = message.getChatId();
-        return answerMethodFactory.getSendMessage(chatId, NO_COMMAND_TEXT, null);
+        return answerMethodFactory.getSendMessage(
+                message,
+                NO_COMMAND_TEXT,
+                null
+        );
     }
 
     @Override
@@ -32,10 +35,10 @@ public class UnknownCommandManager extends AbstractManager {
 
     @Override
     public BotApiMethod<?> answerCallbackQuery(CallbackQuery callbackQuery, Bot bot) {
-        Message message = (Message)callbackQuery.getMessage();
-        Long chatId = message.getChatId();
-        Integer messageId = message.getMessageId();
-
-        return answerMethodFactory.getEditMessageText(chatId, messageId, NO_CALLBACK_QUERY_TEXT, null);
+        return answerMethodFactory.getEditMessageText(
+                callbackQuery,
+                NO_CALLBACK_QUERY_TEXT,
+                null
+        );
     }
 }

@@ -24,9 +24,12 @@ public class FeedbackManager extends AbstractManager {
 
     @Override
     public BotApiMethod<?> answerCommand(Message message, Bot bot){
-        Long chatId = message.getChatId();
 
-        return answerMethodFactory.getSendMessage(chatId, FEEDBACK_TEXT, null);
+        return answerMethodFactory.getSendMessage(
+                message,
+                FEEDBACK_TEXT,
+                null
+        );
     }
 
     @Override
@@ -36,11 +39,11 @@ public class FeedbackManager extends AbstractManager {
 
     @Override
     public BotApiMethod<?> answerCallbackQuery(CallbackQuery callbackQuery, Bot bot) {
-        Message message = (Message) callbackQuery.getMessage();
-        Long chatId = message.getChatId();
-        Integer messageId = message.getMessageId();
-
-        return answerMethodFactory.getEditMessageText(chatId, messageId, FEEDBACK_TEXT, null);
+        return answerMethodFactory.getEditMessageText(
+                callbackQuery,
+                FEEDBACK_TEXT,
+                null
+        );
     }
 
 }

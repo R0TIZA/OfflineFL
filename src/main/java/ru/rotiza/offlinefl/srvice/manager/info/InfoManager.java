@@ -24,9 +24,11 @@ public class InfoManager extends AbstractManager {
 
     @Override
     public BotApiMethod<?> answerCommand(Message message, Bot bot) {
-        Long chatId = message.getChatId();
-
-        return answerMethodFactory.getSendMessage(chatId, INFO_TEXT, null);
+        return answerMethodFactory.getSendMessage(
+                message,
+                INFO_TEXT,
+                null
+        );
     }
 
     @Override
@@ -36,10 +38,10 @@ public class InfoManager extends AbstractManager {
 
     @Override
     public BotApiMethod<?> answerCallbackQuery(CallbackQuery callbackQuery, Bot bot) {
-        Message message = (Message) callbackQuery.getMessage();
-        Long chatId = message.getChatId();
-        Integer messageId = message.getMessageId();
-
-        return answerMethodFactory.getEditMessageText(chatId, messageId, INFO_TEXT, null);
+        return answerMethodFactory.getEditMessageText(
+                callbackQuery,
+                INFO_TEXT,
+                null
+        );
     }
 }

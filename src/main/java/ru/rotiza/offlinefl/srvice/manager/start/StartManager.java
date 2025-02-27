@@ -25,9 +25,11 @@ public class StartManager extends AbstractManager {
 
     @Override
     public BotApiMethod<?> answerCommand(Message message, Bot bot) {
-        Long chatId = message.getChatId();
-
-        return answerMethodFactory.getSendMessage(chatId, INFO_TEXT, START_INLINE_KEYBOARD);
+        return answerMethodFactory.getSendMessage(
+                message,
+                INFO_TEXT,
+                START_INLINE_KEYBOARD
+        );
     }
 
     @Override
@@ -37,10 +39,10 @@ public class StartManager extends AbstractManager {
 
     @Override
     public BotApiMethod<?> answerCallbackQuery(CallbackQuery callbackQuery, Bot bot) {
-        Message message = (Message) callbackQuery.getMessage();
-        Long chatId = message.getChatId();
-        Integer messageId = message.getMessageId();
-
-        return answerMethodFactory.getEditMessageText(chatId, messageId, INFO_TEXT, START_INLINE_KEYBOARD);
+        return answerMethodFactory.getEditMessageText(
+                callbackQuery,
+                INFO_TEXT,
+                START_INLINE_KEYBOARD
+        );
     }
 }
