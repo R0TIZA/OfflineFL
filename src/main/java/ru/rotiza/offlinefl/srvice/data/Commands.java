@@ -22,4 +22,8 @@ public class Commands {
     public static final String TASK = "task";
     public static final String TASK_PIN = "task_pin";
 
+    //Group of ProgressControl commands
+    public static final String PROGRESS_CONTROL = "progress";
+    public static final String PROGRESS_CONTROL_STAT = "progress_stat";
+
 }

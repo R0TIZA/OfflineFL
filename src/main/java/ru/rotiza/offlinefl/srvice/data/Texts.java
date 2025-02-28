@@ -31,4 +31,8 @@ public class Texts {
     //Task texts
     public static final String TASK_MENU_TEXT = "Вы можете добавить домашнее задание ученику.";
     public static final String TASK_PIN_TEXT = "Для назначения домашнего задания, выберите ученика.";
+
+    //ProcessControl texts
+    public static final String PROGRESS_CONTROL_MENU_TEXT = "Вы можете увидеть";
+    public static final String PROGRESS_CONTROL_SHOW_TEXT = "Для проверки домашнего задания, выберите ученика.";
 }

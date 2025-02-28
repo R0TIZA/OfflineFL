@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.rotiza.offlinefl.srvice.manager.echo.EchoManager;
 import ru.rotiza.offlinefl.srvice.manager.feedback.FeedbackManager;
 import ru.rotiza.offlinefl.srvice.manager.info.InfoManager;
+import ru.rotiza.offlinefl.srvice.manager.progress_control.ProgressControlManager;
 import ru.rotiza.offlinefl.srvice.manager.start.StartManager;
 import ru.rotiza.offlinefl.srvice.manager.task.TaskManager;
 import ru.rotiza.offlinefl.srvice.manager.timetable.TimetableManager;
@@ -28,6 +29,7 @@ public class CommandHandler {
     final UnknownCommandManager unknownCommandManager;
     final TimetableManager timetableManager;
     final TaskManager taskManager;
+    final ProgressControlManager progressControlManager;
 
     @Autowired
     public CommandHandler(InfoManager infoManager,
@@ -36,7 +38,8 @@ public class CommandHandler {
                           UnknownCommandManager unknownCommandManager,
                           StartManager startManager,
                           TimetableManager timetableManager,
-                          TaskManager taskManager) {
+                          TaskManager taskManager,
+                          ProgressControlManager progressControlManager) {
         this.infoManager = infoManager;
         this.echoManager = echoManager;
         this.feedbackManager = feedbackManager;
@@ -44,6 +47,7 @@ public class CommandHandler {
         this.startManager = startManager;
         this.timetableManager = timetableManager;
         this.taskManager = taskManager;
+        this.progressControlManager = progressControlManager;
     }
 
     public BotApiMethod<?> answer(Message message, Bot bot) {
@@ -64,6 +68,8 @@ public class CommandHandler {
                 return timetableManager.answerCommand(message, bot);
             case TASK:
                 return taskManager.answerCommand(message, bot);
+            case PROGRESS_CONTROL:
+                return progressControlManager.answerCommand(message, bot);
             default:
                 return unknownCommandManager.answerCommand(message, bot);
         }

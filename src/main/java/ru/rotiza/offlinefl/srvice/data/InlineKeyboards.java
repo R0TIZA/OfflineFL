@@ -51,4 +51,16 @@ public class InlineKeyboards {
             List.of(TASK),
             List.of(1)
     );
+
+    //ProgressControl keyboards
+    public static final InlineKeyboardMarkup PROGRESS_CONTROL_MENU_INLINE_KEYBOARD = keyboardFactory.getInlineKeyboard(
+            List.of("Статистика успеваемости"),
+            List.of(PROGRESS_CONTROL_STAT),
+            List.of(1)
+    );
+    public static final InlineKeyboardMarkup PROGRESS_CONTROL_SHOW_INLINE_KEYBOARD = keyboardFactory.getInlineKeyboard(
+            List.of("<Назад"),
+            List.of(PROGRESS_CONTROL),
+            List.of(1)
+    );
 }

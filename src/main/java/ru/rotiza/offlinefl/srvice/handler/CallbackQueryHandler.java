@@ -6,16 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.rotiza.offlinefl.srvice.manager.echo.EchoManager;
 import ru.rotiza.offlinefl.srvice.manager.feedback.FeedbackManager;
 import ru.rotiza.offlinefl.srvice.manager.info.InfoManager;
+import ru.rotiza.offlinefl.srvice.manager.progress_control.ProgressControlManager;
 import ru.rotiza.offlinefl.srvice.manager.task.TaskManager;
 import ru.rotiza.offlinefl.srvice.manager.timetable.TimetableManager;
 import ru.rotiza.offlinefl.srvice.manager.unknown_command.UnknownCommandManager;
 import ru.rotiza.offlinefl.telegram.Bot;
-
-import java.util.Arrays;
 
 import static ru.rotiza.offlinefl.srvice.data.Commands.*;
 
@@ -29,6 +27,7 @@ public class CallbackQueryHandler {
     final UnknownCommandManager unknownCommandManager;
     final TimetableManager timetableManager;
     final TaskManager taskManager;
+    final ProgressControlManager progressControlManager;
 
     @Autowired
     public CallbackQueryHandler(InfoManager infoManager,
@@ -36,13 +35,15 @@ public class CallbackQueryHandler {
                                 FeedbackManager feedbackManager,
                                 UnknownCommandManager unknownCommandManager,
                                 TimetableManager timetableManager,
-                                TaskManager taskManager) {
+                                TaskManager taskManager,
+                                ProgressControlManager progressControlManager) {
         this.infoManager = infoManager;
         this.echoManager = echoManager;
         this.feedbackManager = feedbackManager;
         this.unknownCommandManager = unknownCommandManager;
         this.timetableManager = timetableManager;
         this.taskManager = taskManager;
+        this.progressControlManager = progressControlManager;
     }
 
     public BotApiMethod<?> answer(CallbackQuery callbackQuery, Bot bot) {
@@ -59,6 +60,8 @@ public class CallbackQueryHandler {
                 return timetableManager.answerCallbackQuery(callbackQuery, bot);
             case TASK:
                 return taskManager.answerCallbackQuery(callbackQuery, bot);
+            case PROGRESS_CONTROL:
+                return progressControlManager.answerCallbackQuery(callbackQuery, bot);
             default:
                 return unknownCommandManager.answerCallbackQuery(callbackQuery, bot);
         }
