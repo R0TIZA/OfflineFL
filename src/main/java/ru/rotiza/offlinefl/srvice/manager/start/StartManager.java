@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import ru.rotiza.offlinefl.entity.User;
-import ru.rotiza.offlinefl.repository.UserRepo;
 import ru.rotiza.offlinefl.srvice.factory.AnswerMethodFactory;
 import ru.rotiza.offlinefl.srvice.manager.AbstractManager;
 import ru.rotiza.offlinefl.telegram.Bot;
@@ -20,19 +18,13 @@ import static ru.rotiza.offlinefl.srvice.data.InlineKeyboards.*;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StartManager extends AbstractManager {
 
-    final UserRepo userRepo;
-
     @Autowired
-    public StartManager(AnswerMethodFactory answerMethodFactory, UserRepo userRepo) {
+    public StartManager(AnswerMethodFactory answerMethodFactory) {
         super(answerMethodFactory);
-        this.userRepo = userRepo;
     }
 
     @Override
     public BotApiMethod<?> answerCommand(Message message, Bot bot) {
-        userRepo.save(User.builder()
-                .userId(message.getFrom().getId())
-                .build());
         return answerMethodFactory.getSendMessage(
                 message,
                 INFO_TEXT,
