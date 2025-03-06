@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import ru.rotiza.offlinefl.srvice.manager.auth.AuthManager;
 import ru.rotiza.offlinefl.srvice.manager.echo.EchoManager;
 import ru.rotiza.offlinefl.srvice.manager.feedback.FeedbackManager;
 import ru.rotiza.offlinefl.srvice.manager.info.InfoManager;
@@ -28,6 +29,7 @@ public class CallbackQueryHandler {
     final TimetableManager timetableManager;
     final TaskManager taskManager;
     final ProgressControlManager progressControlManager;
+    final AuthManager authManager;
 
     @Autowired
     public CallbackQueryHandler(InfoManager infoManager,
@@ -36,7 +38,8 @@ public class CallbackQueryHandler {
                                 UnknownCommandManager unknownCommandManager,
                                 TimetableManager timetableManager,
                                 TaskManager taskManager,
-                                ProgressControlManager progressControlManager) {
+                                ProgressControlManager progressControlManager,
+                                AuthManager authManager) {
         this.infoManager = infoManager;
         this.echoManager = echoManager;
         this.feedbackManager = feedbackManager;
@@ -44,6 +47,7 @@ public class CallbackQueryHandler {
         this.timetableManager = timetableManager;
         this.taskManager = taskManager;
         this.progressControlManager = progressControlManager;
+        this.authManager = authManager;
     }
 
     public BotApiMethod<?> answer(CallbackQuery callbackQuery, Bot bot) {
@@ -62,6 +66,8 @@ public class CallbackQueryHandler {
                 return taskManager.answerCallbackQuery(callbackQuery, bot);
             case PROGRESS_CONTROL:
                 return progressControlManager.answerCallbackQuery(callbackQuery, bot);
+            case AUTH:
+                return authManager.answerCallbackQuery(callbackQuery, bot);
             default:
                 return unknownCommandManager.answerCallbackQuery(callbackQuery, bot);
         }

@@ -1,6 +1,7 @@
 package ru.rotiza.offlinefl.srvice.factory;
 
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -33,10 +34,20 @@ public class AnswerMethodFactory {
                 .build();
     }
 
-    public DeleteMessage getDeleteMessage(Long chatId, Integer messageId) {
+    public DeleteMessage getDeleteMessage(Message message) {
+        Long chatId = message.getChatId();
+        Integer messageId = message.getMessageId();
+
         return DeleteMessage.builder()
                 .chatId(chatId)
                 .messageId(messageId)
+                .build();
+    }
+
+    public AnswerCallbackQuery getAnswerCallbackQuery(CallbackQuery callbackQuery, String text) {
+        return AnswerCallbackQuery.builder()
+                .text(text)
+                .callbackQueryId(callbackQuery.getId())
                 .build();
     }
 }

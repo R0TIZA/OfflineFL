@@ -26,4 +26,8 @@ public class Commands {
     public static final String PROGRESS_CONTROL = "progress";
     public static final String PROGRESS_CONTROL_STAT = "progress_stat";
 
+    //Group of Auth commands
+    public static final String AUTH = "auth";
+    public static final String AUTH_TEACHER = "auth_teacher";
+    public static final String AUTH_STUDENT = "auth_student";
 }

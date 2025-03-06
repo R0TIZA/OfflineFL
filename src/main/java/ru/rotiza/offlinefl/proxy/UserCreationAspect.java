@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
@@ -19,6 +20,7 @@ import ru.rotiza.offlinefl.repository.UserRepo;
 import java.time.LocalDateTime;
 
 @Component
+@Order(10)
 @Aspect
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserCreationAspect {
@@ -38,12 +40,11 @@ public class UserCreationAspect {
 
     @Around("distributeMethodPointcut()")
     public Object distributeMethodAdvice(final ProceedingJoinPoint joinPoint) throws Throwable {
-        Object[] args = joinPoint.getArgs();
-        Update update = (Update) args[0];
-        User tgUser = null;
+        Update update = (Update) joinPoint.getArgs()[0];
+        User tgUser;
 
         if(update.hasMessage()) tgUser = update.getMessage().getFrom();
-        else if (update.hasCallbackQuery()) update.getCallbackQuery().getFrom();
+        else if (update.hasCallbackQuery()) tgUser = update.getCallbackQuery().getFrom();
         else return joinPoint.proceed();
 
         if(userRepo.existsById(tgUser.getId())) return joinPoint.proceed();
@@ -59,7 +60,7 @@ public class UserCreationAspect {
         ru.rotiza.offlinefl.entity.user.User newUser = ru.rotiza.offlinefl.entity.user.User.builder()
                 .userId(tgUser.getId())
                 .action(Action.FREE)
-                .role(Role.USER)
+                .role(Role.EMPTY)
                 .details(details)
                 .build();
         userRepo.save(newUser);

@@ -35,4 +35,9 @@ public class Texts {
     //ProcessControl texts
     public static final String PROGRESS_CONTROL_MENU_TEXT = "Вы можете увидеть";
     public static final String PROGRESS_CONTROL_SHOW_TEXT = "Для проверки домашнего задания, выберите ученика.";
+
+    //Auth texts
+    public static final String AUTH_TEXT = "Выберите свою роль.";
+    public static final String AUTH_STUDENT_TEXT = "Роль студента была успешно установлена!";
+    public static final String AUTH_TEACHER_TEXT = "Роль учителя была успешно установлена!";
 }

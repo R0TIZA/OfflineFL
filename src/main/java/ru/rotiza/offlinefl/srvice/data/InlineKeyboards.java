@@ -63,4 +63,11 @@ public class InlineKeyboards {
             List.of(PROGRESS_CONTROL),
             List.of(1)
     );
+
+    //Auth keyboards
+    public static final InlineKeyboardMarkup AUTH_INLINE_KEYBOARD = keyboardFactory.getInlineKeyboard(
+            List.of("Ученик", "Учитель"),
+            List.of(AUTH_STUDENT, AUTH_TEACHER),
+            List.of(2)
+    );
 }
