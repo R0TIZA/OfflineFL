@@ -30,4 +30,7 @@ public class Commands {
     public static final String AUTH = "auth";
     public static final String AUTH_TEACHER = "auth_teacher";
     public static final String AUTH_STUDENT = "auth_student";
+
+    //Group of Profile commands
+    public static final String PROFILE = "profile";
 }

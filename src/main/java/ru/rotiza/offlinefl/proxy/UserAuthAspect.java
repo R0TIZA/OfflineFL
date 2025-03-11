@@ -2,6 +2,7 @@ package ru.rotiza.offlinefl.proxy;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.rotiza.offlinefl.entity.user.Action;
 import ru.rotiza.offlinefl.entity.user.Role;
 import ru.rotiza.offlinefl.entity.user.User;
@@ -20,6 +22,7 @@ import ru.rotiza.offlinefl.telegram.Bot;
 @Aspect
 @Order(100)
 @Component
+@Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserAuthAspect {
     final UserRepo userRepo;
@@ -46,7 +49,14 @@ public class UserAuthAspect {
         if(user.getRole() != Role.EMPTY) return joinPoint.proceed();
         if(user.getAction() == Action.AUTH) return joinPoint.proceed();
 
-        return authManager.answerMessage(update.getMessage(), bot);
+        try{
+            bot.execute(authManager.answerMessage(update.getMessage(), bot));
+        }
+        catch (TelegramApiException e){
+            log.error(e.getMessage());
+        }
+
+        return joinPoint.proceed();
     }
 
 }
